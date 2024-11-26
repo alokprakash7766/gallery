@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Image Gallery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            animation: fadeIn 1s ease-in-out;
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        #gallery .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        /* Image Box Styling with Gradient Border and Blink */
+        #gallery .col-md-3 {
+            flex: 1 1 22%;
+            max-width: 22%;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            border-radius: 8px;
+            animation: blink 2s infinite alternate;
+            background-image: linear-gradient(45deg, #ff6b81, #ff8f00, #00c6ff, #00ff84);
+            background-size: 400%;
+            padding: 5px;
+        }
+
+        #gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        #gallery .col-md-3:hover img {
+            transform: scale(1.1);
+            opacity: 0.9;
+        }
+
+        @keyframes blink {
+            0% {
+                border-color: transparent;
+            }
+
+            50% {
+                border-color: white;
+            }
+
+            100% {
+                border-color: transparent;
+            }
+        }
+        .nav-link{
+            color: #fff;
+            background: hwb(185 11% 6%);
+            font-weight: 600;
+        }
+        .nav-link:hover{
+            color: black;
+            background: #fff;
+
+        }
+
+        .payment-btn {
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: transparent;
+            border: 2px solid transparent;
+            border-radius: 50px;
+            background-image: linear-gradient(45deg, #ff6b81, #ff8f00, #00c6ff, #00ff84);
+            background-size: 400%;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .payment-btn:hover {
+            background-position: right center;
+            color: #fff;
+            box-shadow: 0 0 5px #ff6b81, 0 0 10px #ff6b81, 0 0 15px #ff6b81;
+            transform: rotate(360deg);
+        }
+
+        footer {
+            background-color: #3dd0ee;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        .social-icons a {
+            color: white;
+            margin: 0 10px;
+            font-size: 20px;
+            text-decoration: none;
+        }
+        
+
+        .social-icons a:hover {
+            color: #00bfae;
+        }
+
+        /* Admin Section (Hidden initially) */
+        #uploadSection {
+            display: none;
+        }
+
+        /* Fixed WhatsApp Chat Button */
+       
+        #whatsapp-chat {
+            position: fixed;
+            bottom: 20px; /* Position from the bottom of the page */
+            right: 20px;  /* Position from the right of the page */
+            z-index: 1000;
+        }
+        
+        #whatsapp-chat a {
+            display: block;
+            width: 60px;  /* Width of the WhatsApp icon */
+            height: 60px; /* Height of the WhatsApp icon */
+        }
+        
+        #whatsapp-chat img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease; /* Smooth animation for scaling */
+        }
+        
+        #whatsapp-chat:hover img {
+            transform: scale(1.1); /* Slightly enlarge the WhatsApp icon on hover */
+        }
+        
+        #whatsapp-chat a::after {
+            content: 'Chat with us on WhatsApp'; /* Message displayed when hovering */
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            background-color: #25d366;
+            color: white;
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        #whatsapp-chat:hover a::after {
+            display: block; /* Show the message when hovering over the icon */
+        }
+        
+
+        /* Fixed Navbar */
+        nav.navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .blinking {
+            animation: blink-animation 1s infinite step-start;
+          }
+          
+          @keyframes blink-animation {
+            0% { visibility: visible; }
+            50% { visibility: hidden; }
+            100% { visibility: visible; }
+          }
+          
+          .color-change {
+            animation: colorAnimation 5s infinite;
+          }
+          
+          @keyframes colorAnimation {
+            0% {
+              color: red; /* Initial color */
+            }
+            25% {
+              color: blue; /* 1st color change */
+            }
+            50% {
+              color: rgb(190, 34, 252); /* 2nd color change */
+            }
+            75% {
+              color: yellow; /* 3rd color change */
+            }
+            100% {
+              color: rgb(36, 212, 235); /* 4th color change */
+            }
+          }
+          
+          
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand color-change" href="profile/index.html">My Profile</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <button class="nav-link color-change" onclick="showAdminSection()">Admin</button>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Image Gallery Section -->
+    <section id="gallery" class="mt-5">
+        <div class="container">
+            <h2 class="text-center blinking "><p class="color-change">Image Gallery</p></h2>
+
+            <!-- Add Image Section (Admin Only) -->
+            <div id="uploadSection" class="text-center mb-5">
+                <input type="file" id="imageInput" class="form-control" accept="image/*">
+                <input type="text" id="imageDescription" class="form-control mt-3" placeholder="Enter image description">
+                <button class="btn btn-success mt-3 color-change" onclick="uploadImage()">Upload Image</button>
+            </div>
+
+            <div class="row" id="gallery-images">
+                <!-- Dynamic Gallery Images will appear here -->
+                 <img src="myphoto/1724072237774.jpg" alt="">
+            </div>
+        </div>
+    </section>
+
+    <!-- WhatsApp Chat Button -->
+    <div id="whatsapp-chat">
+        <a href="https://wa.me/+919065834810" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Chat">
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        
+        <div class="social-icons">
+            <a class="color-change" href="https://www.instagram.com/technicaltiger2.0/" target="_blank">Instagram</a>
+            <a class="color-change" href="https://github.com/alokprakash7766" target="_blank">Github</a>
+            <a class="color-change" href="https://alokprakash7766.github.io/Alok_portfolio/" target="_blank">My Portfolio Website</a>
+        </div>
+        <p>&copy; 2024 Image Gallery | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        const images = JSON.parse(localStorage.getItem("images")) || [];
+
+        // Render Gallery
+        const renderGallery = () => {
+            const galleryContainer = document.getElementById("gallery-images");
+            galleryContainer.innerHTML = "";
+            images.forEach((image, index) => {
+                const div = document.createElement("div");
+                div.classList.add("col-md-3");
+                div.innerHTML = `
+                    <img src="${image.src}" alt="${image.description}">
+                    <p>${image.description}</p>
+                    <button class="btn btn-primary payment-btn" onclick="downloadImage(${index})">
+                        Download Now
+                    </button>
+                    <div id="delete-container-${index}" style="display: none;">
+                        <button class="btn btn-danger payment-btn" onclick="deleteImage(${index})">Delete</button>
+                    </div>
+                `;
+                galleryContainer.appendChild(div);
+            });
+        };
+
+        // Image Upload Logic
+        function uploadImage() {
+            if (images.length >= 200) {
+                alert("You can upload a maximum of 200 images.");
+                return;
+            }
+
+            const imageInput = document.getElementById("imageInput");
+            const imageDescription = document.getElementById("imageDescription");
+            const file = imageInput.files[0];
+            const description = imageDescription.value.trim();
+
+            if (!file || !description) {
+                alert("Please provide both an image and a description.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const newImage = {
+                    src: e.target.result,
+                    description: description,
+                    downloadLink: e.target.result
+                };
+                images.push(newImage);
+                localStorage.setItem("images", JSON.stringify(images));
+                renderGallery();
+
+                // Clear inputs
+                imageInput.value = "";
+                imageDescription.value = "";
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Image Download Logic
+        function downloadImage(index) {
+            const selectedImage = images[index];
+            const downloadLink = selectedImage.downloadLink;
+            const a = document.createElement('a');
+            a.href = downloadLink;
+            a.download = selectedImage.description;
+            a.click();
+        }
+
+        // Show Admin Upload Section after password check
+        function showAdminSection() {
+            const password = prompt("Enter Admin Password:");
+
+            if (password === "Ritik@789") {
+                localStorage.setItem("lastLoginTime", new Date().getTime());
+                document.getElementById("uploadSection").style.display = "block";
+                showDeleteButtons();
+            } else {
+                alert("Incorrect password! Access denied.");
+            }
+        }
+
+        // Show Delete Buttons for Admin
+        function showDeleteButtons() {
+            images.forEach((_, index) => {
+                document.getElementById(`delete-container-${index}`).style.display = "block";
+            });
+        }
+
+        // Delete Image Logic
+        function deleteImage(index) {
+            if (confirm("Are you sure you want to delete this image?")) {
+                images.splice(index, 1); // Remove the image from the array
+                localStorage.setItem("images", JSON.stringify(images)); // Update localStorage
+                renderGallery(); // Re-render the gallery without the deleted image
+            }
+        }
+
+        // Initial render
+        renderGallery();
+    </script>
+
+</body>
+
+</html>
